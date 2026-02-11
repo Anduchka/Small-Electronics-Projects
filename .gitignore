@@ -1,0 +1,26 @@
+# Automatic backup files
+*.FCStd1
+*.FCStd2
+*.FCStd3
+*.FCStd4
+*.FCStd5
+
+*.FCBak
+
+# Temporary files
+*.bak
+*.tmp
+
+# Autosave files
+*.autosave
+
+# FreeCAD lock files
+*.lck
+
+# Python compiled files
+__pycache__/
+*.pyc
+
+# Windows system files
+Thumbs.db
+desktop.ini
