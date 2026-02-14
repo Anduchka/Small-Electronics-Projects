@@ -1,6 +1,6 @@
 # Fluid Keychain
 
-Status: 🚧 In Progress
+Status: 🟨 In Progress
 
 ## Description
 Small interactable keychain built with RP2040 and 8X8 LED matrix.
