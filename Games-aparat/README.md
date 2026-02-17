@@ -1,6 +1,6 @@
 # Games Aparat
 
-Status: ✅ Finished
+Status: 🟩 Finished
 
 ## Description
 Portable gaming device built with RP2040 and small OLED screen.
