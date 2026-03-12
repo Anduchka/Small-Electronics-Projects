@@ -1,6 +1,6 @@
 # Fluid Keychain
 
-Status: 🟨 In Progress
+Status: 🟩 Finished
 
 ## Description
 Small interactable keychain built with RP2040 and 8X8 LED matrix.
@@ -19,4 +19,4 @@ Small interactable keychain built with RP2040 and 8X8 LED matrix.
 - MPU6500 Gyroscope Accelerometer
 
 ## Build Instructions
-Will be in `build_instructions.pdf`
+See `build_instructions.pdf`

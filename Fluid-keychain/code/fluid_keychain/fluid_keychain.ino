@@ -28,7 +28,7 @@ struct Grain{
   int x, y;
 };
 
-const int GRAIN_COUNT = 25;
+const int GRAIN_COUNT = 24;
 Grain grains[GRAIN_COUNT];
 
 bool in_bounds(int x, int y){
@@ -47,11 +47,24 @@ void draw_grains(){
 void move_grains(float gx, float gy){
   bool occupied[8][8] = {false};
 
-  for (int i = 0; i < GRAIN_COUNT; i++)
+  for (int i = 0; i < GRAIN_COUNT; i++){
     occupied[grains[i].x][grains[i].y] = true;
+  }
+
+  int order[GRAIN_COUNT];
+  for(int i = 0; i < GRAIN_COUNT; i++){
+    order[i] = i;
+  }
+
+  for(int i = GRAIN_COUNT - 1; i > 0; i--){
+    int j = random(i + 1);
+    int tmp = order[i];
+    order[i] = order[j];
+    order[j] = tmp;
+  }
 
   for (int step = 0; step < GRAIN_COUNT; step++) {
-    int i = random(GRAIN_COUNT);
+    int i = order[step];
 
     int x = grains[i].x;
     int y = grains[i].y;
@@ -66,13 +79,28 @@ void move_grains(float gx, float gy){
       occupied[x][y] = false;
       grains[i].x = nx;
       grains[i].y = ny;
-      grains[i].y = ny;
+      occupied[nx][ny] = true;
       continue;
     }
 
     int side = random(2) ? 1 : -1;
 
-    nx = x + dx + side;
+    if(dx != 0 && dy != 0){
+      if(side == -1){
+        dx = 0;
+      }
+      else{
+        dy = 0;
+      }
+    }
+    else if(dx != 0){
+      dy = side;
+    }
+    else if(dy != 0){
+      dx = side;
+    }
+
+    nx = x + dx;
     ny = y + dy;
 
     if (in_bounds(nx, ny) && !occupied[nx][ny]) {
