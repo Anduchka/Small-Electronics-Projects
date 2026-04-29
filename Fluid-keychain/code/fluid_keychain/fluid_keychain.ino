@@ -30,6 +30,8 @@ struct Grain{
 
 const int GRAIN_COUNT = 24;
 Grain grains[GRAIN_COUNT];
+int saved_dx = 0;
+int saved_dy = 0;
 
 bool in_bounds(int x, int y){
   return x >= 0 && x < 8 && y >= 0 && y < 8;
@@ -37,7 +39,7 @@ bool in_bounds(int x, int y){
 
 void draw_grains(){
   matrix.clear();
-  for(int i = 0; i < GRAIN_COUNT; i++){
+  for (int i = 0; i < GRAIN_COUNT; i++){
     matrix.drawPixel(grains[i].x, grains[i].y, LED_ON);
   }
 
@@ -47,16 +49,24 @@ void draw_grains(){
 void move_grains(float gx, float gy){
   bool occupied[8][8] = {false};
 
+  int dx = (gx > 0.15) ? 1 : (gx < -0.15 ? -1 : 0);
+  int dy = (gy > 0.15) ? 1 : (gy < -0.15 ? -1 : 0);
+
+  if (dx != 0 || dy != 0){
+    saved_dx = dx;
+    saved_dy = dy;
+  }
+
   for (int i = 0; i < GRAIN_COUNT; i++){
     occupied[grains[i].x][grains[i].y] = true;
   }
 
   int order[GRAIN_COUNT];
-  for(int i = 0; i < GRAIN_COUNT; i++){
+  for (int i = 0; i < GRAIN_COUNT; i++){
     order[i] = i;
   }
 
-  for(int i = GRAIN_COUNT - 1; i > 0; i--){
+  for (int i = GRAIN_COUNT - 1; i > 0; i--){
     int j = random(i + 1);
     int tmp = order[i];
     order[i] = order[j];
@@ -69,11 +79,16 @@ void move_grains(float gx, float gy){
     int x = grains[i].x;
     int y = grains[i].y;
 
-    int dx = (gx > 0.2) ? 1 : (gx < -0.2 ? -1 : 0);
-    int dy = (gy > 0.2) ? 1 : (gy < -0.2 ? -1 : 0);
+    int grain_dx = dx;
+    int grain_dy = dy;
 
-    int nx = x + dx;
-    int ny = y + dy;
+    if (grain_dx == 0 && grain_dy == 0){
+      grain_dx = saved_dx;
+      grain_dy = saved_dy;
+    }
+
+    int nx = x + grain_dx;
+    int ny = y + grain_dy;
 
     if (in_bounds(nx, ny) && !occupied[nx][ny]) {
       occupied[x][y] = false;
@@ -85,23 +100,23 @@ void move_grains(float gx, float gy){
 
     int side = random(2) ? 1 : -1;
 
-    if(dx != 0 && dy != 0){
+    if (grain_dx != 0 && grain_dy != 0){
       if(side == -1){
-        dx = 0;
+        grain_dx = 0;
       }
       else{
-        dy = 0;
+        grain_dy = 0;
       }
     }
-    else if(dx != 0){
-      dy = side;
+    else if (grain_dx != 0){
+      grain_dy = side;
     }
-    else if(dy != 0){
-      dx = side;
+    else if (grain_dy != 0){
+      grain_dx = side;
     }
 
-    nx = x + dx;
-    ny = y + dy;
+    nx = x + grain_dx;
+    ny = y + grain_dy;
 
     if (in_bounds(nx, ny) && !occupied[nx][ny]) {
       occupied[x][y] = false;
